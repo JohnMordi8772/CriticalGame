@@ -6,8 +6,10 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public Rigidbody2D rb2d;
     public CapsuleCollider2D coll;
+    public SpriteRenderer sr;
 
     public bool grounded = false;
+    public bool slipping = false;
     public PhysicsMaterial2D normal;
     public PhysicsMaterial2D slip;
     public ContactPoint2D[] contacts;
@@ -19,11 +21,12 @@ public class PlayerBehaviour : MonoBehaviour
     public Vector2 curveCenterBottom;
 
     public Vector2 moveDir;
-    public float moveForce;
+    public float moveForce = 150f;
     public float walkSpeed = 10f;
     public float sprintSpeed = 20f;
     public float crouchSpeed = 5f;
     public float speedCap = 10f;
+    public float ungroundedModifier = 2f;
 
     public Vector2 finalMove;
     
@@ -40,13 +43,11 @@ public class PlayerBehaviour : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
-        normal.friction = 1;
-        slip.friction = 0;
     }
 
     void Update()
     {
-        moveDir = (transform.right * Input.GetAxisRaw("Horizontal") + transform.forward * Input.GetAxisRaw("Vertical")).normalized;
+        moveDir = (transform.right * Input.GetAxisRaw("Horizontal")).normalized;
         Crouch();
 
         if (Input.GetKeyDown(jump))
@@ -66,43 +67,18 @@ public class PlayerBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (grounded == true)
+        if (moveDir != Vector2.zero)
+        {
+            Movement();
+        }
+
+        if (slipping != true)
         {
             coll.sharedMaterial = normal;
-
-            if (moveDir != Vector2.zero)
-            {
-                Movement();
-            }
         }
         else
         {
             coll.sharedMaterial = slip;
-        }
-    }
-
-    /// <summary>
-    /// Calls GroundCheck, inserting its contact points
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        contacts = new ContactPoint2D[collision.contactCount];
-        collision.GetContacts(contacts);
-        GroundCheck(contacts);
-    }
-
-    /// <summary>
-    /// Calls GroundCheck, inserting its contact points, only called if ungrounded while still colliding with something
-    /// </summary>
-    /// <param name="collision"></param>
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (grounded == false)
-        {
-            contacts = new ContactPoint2D[collision.contactCount];
-            collision.GetContacts(contacts);
-            GroundCheck(contacts);
         }
     }
 
@@ -114,12 +90,16 @@ public class PlayerBehaviour : MonoBehaviour
         if (Input.GetKeyDown(crouch))
         {
             coll.size = new Vector2(coll.size.x, coll.size.y / 1.5f);
+            sr.size = new Vector2(sr.size.x, sr.size.y / 1.5f);
+
             crouched = true;
         }
 
         if (Input.GetKeyUp(crouch))
         {
             coll.size = new Vector2(coll.size.x, coll.size.y * 1.5f);
+            sr.size = new Vector2(sr.size.x, sr.size.y * 1.5f);
+
             crouched = false;
         }
     }
@@ -140,6 +120,11 @@ public class PlayerBehaviour : MonoBehaviour
         else
         {
             speedCap = walkSpeed;
+        }
+
+        if (grounded != true)
+        {
+            speedCap /= ungroundedModifier;
         }
 
         if (rb2d.velocity.magnitude < speedCap)
@@ -165,58 +150,20 @@ public class PlayerBehaviour : MonoBehaviour
         }
     }
 
-    float xRotation;
-
-    /// <summary>
-    /// Script used to find a grounding or wall hop-off point
-    /// </summary>
-    /// <param name="contacts_">
-    /// Contacts gathered when OnCollisionEnter is called
-    /// </param>
-    void GroundCheck(ContactPoint2D[] contacts_)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        groundNormals = new List<Vector2>();
-        hits = new List<Vector2>();
-        point = Vector3.zero;
-        groundNormal = Vector3.zero;
-        jumped = true;
+        ContactPoint2D[] contacts = new ContactPoint2D[collision.contactCount];
+        collision.GetContacts(contacts);
+        GroundCheck(contacts);
+    }
 
-        curveCenterBottom = coll.bounds.center - Vector3.up * (coll.bounds.extents.y - coll.bounds.extents.x);
-        curveCenterBottom = 
-
-        foreach (ContactPoint2D c in contacts_)
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (grounded == false)
         {
-            Vector3 dir = curveCenterBottom - c.point;
-
-            if (dir.y > 0f && Mathf.Abs(Vector3.Angle(c.normal, Vector3.up)) <= 40)
-            {
-                groundNormals.Add(c.normal);
-                hits.Add(c.point);
-
-                grounded = true;
-                jumped = false;
-            }
-        }
-
-        //Ground normal calculation
-        if (grounded == true)
-        {
-            if (groundNormals.Count == 1)
-            {
-                groundNormal = groundNormals[0];
-                point = hits[0];
-            }
-            else
-            {
-                for (int i = 0; i < groundNormals.Count; i++)
-                {
-                    groundNormal += groundNormals[i];
-                    point += hits[i];
-
-                    groundNormal /= 2;
-                    point /= 2;
-                }
-            }
+            ContactPoint2D[] contacts = new ContactPoint2D[collision.contactCount];
+            collision.GetContacts(contacts);
+            GroundCheck(contacts);
         }
     }
 
@@ -228,9 +175,29 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            contacts = new ContactPoint2D[collision.contactCount];
+            ContactPoint2D[] contacts = new ContactPoint2D[collision.contactCount];
             collision.GetContacts(contacts);
             GroundCheck(contacts);
+        }
+    }
+
+    void GroundCheck(ContactPoint2D[] contacts_)
+    {
+        grounded = false;
+
+        curveCenterBottom = coll.bounds.center - Vector3.up * (coll.bounds.extents.y - coll.bounds.extents.x);
+
+        foreach (ContactPoint2D c in contacts_)
+        {
+            Vector2 dir = c.point - curveCenterBottom;
+
+            if (dir.y < 0f)
+            {
+                groundNormal = c.normal;
+
+                grounded = true;
+                jumped = false;
+            }
         }
     }
 }
