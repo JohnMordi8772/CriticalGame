@@ -19,7 +19,7 @@ public class ItemBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cc2d.size = new Vector2(1 + (pb.itemCount *.5f), 1 + (pb.itemCount * .5f));
+        cc2d.size = new Vector2(1 + (pb.itemCount), 1 + (pb.itemCount));
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -35,7 +35,7 @@ public class ItemBehaviour : MonoBehaviour
     {
         if(target.tag == "Player")
         {
-            target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position, ((1 + (pb.itemCount * .1f)) * .05f));
+            target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position, ((1 + (pb.itemCount * .1f)) * .03f));
         }
     }
 }
