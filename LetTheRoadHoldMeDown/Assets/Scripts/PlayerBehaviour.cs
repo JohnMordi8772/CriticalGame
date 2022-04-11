@@ -17,21 +17,24 @@ public class PlayerBehaviour : MonoBehaviour
     public List<Vector2> hits;
     public Vector2 groundNormal;
     public Vector2 point;
-    public Vector2 pointDir;
     public Vector2 curveCenterBottom;
+    public Vector2 curveCenterTop;
 
     public Vector2 moveDir;
+    public Vector2 hopDir;
     public float moveForce = 150f;
     public float walkSpeed = 10f;
     public float sprintSpeed = 20f;
     public float crouchSpeed = 5f;
+    public float airSpeed = 3.5f;
     public float speedCap = 10f;
     public float ungroundedModifier = 2f;
 
     public Vector2 finalMove;
     
     public float jumpForce = 200f;
-    public bool jumped = false;
+    public bool wallHop = false;
+    public bool right = false;
 
     public bool crouched = false;
 
@@ -39,6 +42,8 @@ public class PlayerBehaviour : MonoBehaviour
     public KeyCode sprint = KeyCode.LeftControl;
     public KeyCode crouch = KeyCode.LeftShift;
     public float sensitivity = 200f;
+
+    public int itemCount;
 
     void Start()
     {
@@ -109,29 +114,36 @@ public class PlayerBehaviour : MonoBehaviour
     /// </summary>
     void Movement()
     {
-        if (crouched == true)
+        if (grounded == true)
         {
-            speedCap = crouchSpeed;
-        }
-        else if (Input.GetKey(sprint))
-        {
-            speedCap = sprintSpeed;
+            if (crouched == true)
+            {
+                speedCap = crouchSpeed;
+            }
+            else if (Input.GetKey(sprint))
+            {
+                speedCap = sprintSpeed;
+            }
+            else
+            {
+                speedCap = walkSpeed;
+            }
+
+            if (rb2d.velocity.magnitude < speedCap || moveDir.normalized != rb2d.velocity.normalized)
+            {
+                finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
+
+                rb2d.AddForce(finalMove * moveForce, ForceMode2D.Impulse);
+            }
         }
         else
         {
-            speedCap = walkSpeed;
-        }
+            speedCap = airSpeed;
 
-        if (grounded != true)
-        {
-            speedCap /= ungroundedModifier;
-        }
-
-        if (rb2d.velocity.magnitude < speedCap)
-        {
-            finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
-
-            rb2d.AddForce(finalMove * moveForce, ForceMode2D.Impulse);
+            if (rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap && rb2d.velocity.x != moveDir.x)
+            {
+                rb2d.AddForce(moveDir * moveForce, ForceMode2D.Impulse);
+            }
         }
     }
 
@@ -145,7 +157,20 @@ public class PlayerBehaviour : MonoBehaviour
             if (grounded == true)
             {
                 rb2d.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
-                jumped = true;
+            }
+            else if (wallHop == true)
+            {
+                if (right)
+                {
+                    hopDir = Quaternion.Euler(0f, 0f, 45f) * Vector2.up;
+                }
+                else
+                {
+                    hopDir = Quaternion.Euler(0f, 0f, -45f) * Vector2.up;
+                }
+
+                rb2d.velocity = Vector2.zero;
+                rb2d.AddForce(hopDir * jumpForce * 1.5f, ForceMode2D.Impulse);
             }
         }
     }
@@ -172,6 +197,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (collision.contactCount == 0)
         {
             grounded = false;
+            wallHop = false;
         }
         else
         {
@@ -184,19 +210,34 @@ public class PlayerBehaviour : MonoBehaviour
     void GroundCheck(ContactPoint2D[] contacts_)
     {
         grounded = false;
+        wallHop = false;
+        right = false;
 
-        curveCenterBottom = coll.bounds.center - Vector3.up * (coll.bounds.extents.y - coll.bounds.extents.x);
+        float curveCenters = (coll.bounds.extents.y - coll.bounds.extents.x);
+        curveCenterBottom = coll.bounds.center - Vector3.up * curveCenters;
+        curveCenterTop = coll.bounds.center + Vector3.up * curveCenters;
 
         foreach (ContactPoint2D c in contacts_)
         {
-            Vector2 dir = c.point - curveCenterBottom;
+            Vector3 dir = curveCenterBottom - c.point;
+            Vector3 dir2 = c.point - curveCenterTop;
 
-            if (dir.y < 0f)
+            //Ground detect
+            if (dir.y > 0f && Mathf.Abs(Vector2.Angle(c.normal, Vector3.up)) <= 40)
             {
                 groundNormal = c.normal;
 
                 grounded = true;
-                jumped = false;
+            }
+            //Wall check
+            else if (dir2.y < 0f)
+            {
+                if(c.point.x > transform.position.x)
+                {
+                    right = true;
+                }
+
+                wallHop = true;
             }
         }
     }
