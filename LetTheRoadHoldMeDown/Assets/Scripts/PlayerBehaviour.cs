@@ -40,6 +40,8 @@ public class PlayerBehaviour : MonoBehaviour
     public KeyCode crouch = KeyCode.LeftShift;
     public float sensitivity = 200f;
 
+    public int itemCount;
+
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
