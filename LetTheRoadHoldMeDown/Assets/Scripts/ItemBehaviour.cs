@@ -8,13 +8,17 @@ public class ItemBehaviour : MonoBehaviour
     public GameObject Player;
     public PlayerBehaviour pb;
     public bool isChecked;
+    public CircleCollider2D circ2d;
 
     // Start is called before the first frame update
     void Start()
     {
+        circ2d = GetComponent<CircleCollider2D>();
         cc2d = GetComponent<CapsuleCollider2D>();
         Player = GameObject.Find("Player");
         pb = Player.GetComponent<PlayerBehaviour>();
+
+        Destroy(circ2d);
     }
 
     // Update is called once per frame
