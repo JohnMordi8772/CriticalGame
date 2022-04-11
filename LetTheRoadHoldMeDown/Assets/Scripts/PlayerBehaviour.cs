@@ -125,7 +125,7 @@ public class PlayerBehaviour : MonoBehaviour
             speedCap = walkSpeed;
         }
 
-        if (rb2d.velocity.magnitude < speedCap)
+        if (rb2d.velocity.magnitude < speedCap && rb2d.velocity.x != moveDir.x)
         {
             finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
 
