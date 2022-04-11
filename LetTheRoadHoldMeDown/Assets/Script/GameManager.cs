@@ -10,13 +10,14 @@ public class GameManager : MonoBehaviour
     int stressValue, stressMax;
     static int stressMultiplier;
     static string lastItem;
+    Environment environment;
     public Slider stressVisual;
 
     // Start is called before the first frame update
     void Start()
     {
         stressVisual.value = 0;
-        stressMultiplier = 1;
+        stressMultiplier = -3;
         stressMax = 200;
         stressVisual.maxValue = stressMax;
         StartCoroutine(StressGain());
@@ -31,7 +32,7 @@ public class GameManager : MonoBehaviour
         }
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
-            stressMultiplier = 1;
+            stressMultiplier = 0;
         }
         if(stressVisual.value == stressMax)
         {
@@ -45,19 +46,25 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
 
-            stressVisual.value += stressMultiplier;
+            stressVisual.value += stressMultiplier + environment.currentStress;
         }
     }
 
     public static void AdjustMultiplier(string tag)
     {
-        if(tag != lastItem)
+        if(tag == lastItem)
         {
             stressMultiplier++;
         }
         else
         {
-            stressMultiplier = 1;
+            lastItem = tag;
+            stressMultiplier = -1;
         }
+    }
+
+    public void SetCurrentEnvironment(Environment inEnvironment)
+    {
+        environment = inEnvironment;
     }
 }
