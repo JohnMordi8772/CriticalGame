@@ -112,24 +112,38 @@ public class PlayerBehaviour : MonoBehaviour
     /// </summary>
     void Movement()
     {
-        if (crouched == true)
+        if (grounded)
         {
-            speedCap = crouchSpeed;
-        }
-        else if (Input.GetKey(sprint))
-        {
-            speedCap = sprintSpeed;
+            if (crouched == true)
+            {
+                speedCap = crouchSpeed;
+            }
+            else if (Input.GetKey(sprint))
+            {
+                speedCap = sprintSpeed;
+            }
+            else
+            {
+                speedCap = walkSpeed;
+            }
+
+            if (rb2d.velocity.magnitude < speedCap && rb2d.velocity.x != moveDir.x)
+            {
+                finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
+
+                rb2d.AddForce(finalMove * moveForce, ForceMode2D.Impulse);
+            }
         }
         else
         {
-            speedCap = walkSpeed;
-        }
+            speedCap = airSpeed;
 
-        if (rb2d.velocity.magnitude < speedCap && rb2d.velocity.x != moveDir.x)
-        {
-            finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
+            if (rb2d.velocity.x < speedCap && rb2d.velocity.x != moveDir.x)
+            {
+                finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
 
-            rb2d.AddForce(finalMove * moveForce, ForceMode2D.Impulse);
+                rb2d.AddForce(finalMove * moveForce, ForceMode2D.Impulse);
+            }
         }
     }
 
