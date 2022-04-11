@@ -127,7 +127,7 @@ public class PlayerBehaviour : MonoBehaviour
                 speedCap = walkSpeed;
             }
 
-            if (rb2d.velocity.magnitude < speedCap && rb2d.velocity.x != moveDir.x)
+            if (rb2d.velocity.magnitude < speedCap && moveDir.normalized != rb2d.velocity.normalized)
             {
                 finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
 
@@ -138,7 +138,7 @@ public class PlayerBehaviour : MonoBehaviour
         {
             speedCap = airSpeed;
 
-            if (rb2d.velocity.x < speedCap && rb2d.velocity.x != moveDir.x)
+            if (rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap && rb2d.velocity.x != moveDir.x)
             {
                 finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
 
