@@ -65,7 +65,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (Input.GetKeyDown(jump))
         {
-            Jump();
+            StartCoroutine(Jump());
         }
 
         if (Input.GetKey(KeyCode.Escape))
@@ -160,43 +160,43 @@ public class PlayerBehaviour : MonoBehaviour
     /// </summary>
     IEnumerator Jump()
     {
-        if (Input.GetKeyDown(jump))
+        if (grounded == true || doubleJump == true)
         {
-            if (grounded == true || doubleJump == true)
+            rb2d.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+
+            if (grounded == false)
             {
-                rb2d.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+                doubleJump = false;
             }
-            else if (wallHop == true)
+        }
+        else if (wallHop == true)
+        {
+            if (Input.GetAxisRaw("Vertical") != 0)
             {
-                if (Input.GetAxisRaw("Vertical") != 0)
+                switch (Input.GetAxisRaw("Vertical"))
                 {
-                    switch (Input.GetAxisRaw("Vertical"))
-                    {
-                        case 1:
-                            hopDir = Quaternion.Euler(0f, 0f, hopUp * right) * Vector2.up;
-                            break;
+                    case 1:
+                        hopDir = Quaternion.Euler(0f, 0f, hopUp * right) * Vector2.up;
+                        break;
 
-                        case -1:
-                            hopDir = Quaternion.Euler(0f, 0f, hopOut * right) * Vector2.up;
-                            break;
+                    case -1:
+                        hopDir = Quaternion.Euler(0f, 0f, hopOut * right) * Vector2.up;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-                else
-                {
-                    hopDir = Quaternion.Euler(0f, 0f, hopAngle * right) * Vector2.up;
-                }
-
-                rb2d.velocity = Vector2.zero;
-                rb2d.AddForce(hopDir * jumpForce * 1.5f, ForceMode2D.Impulse);
+            }
+            else
+            {
+                hopDir = Quaternion.Euler(0f, 0f, hopAngle * right) * Vector2.up;
             }
 
-            yield return jumpCD;
+            rb2d.velocity = Vector2.zero;
+            rb2d.AddForce(hopDir * jumpForce * 1.5f, ForceMode2D.Impulse);
         }
 
-        yield return null;
+        yield return jumpCD;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
