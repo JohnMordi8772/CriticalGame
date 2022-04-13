@@ -21,20 +21,26 @@ public class PlayerBehaviour : MonoBehaviour
     public Vector2 curveCenterTop;
 
     public Vector2 moveDir;
-    public Vector2 hopDir;
+    public Vector2 lastDir;
+    public Vector2 finalMove;
     public float moveForce = 150f;
     public float walkSpeed = 10f;
     public float sprintSpeed = 20f;
     public float crouchSpeed = 5f;
     public float airSpeed = 3.5f;
     public float speedCap = 10f;
-    public float ungroundedModifier = 2f;
+    public float ungroundedModifier = 0.75f;
+    public bool dropInput = false;
+    public bool doubleJump = true;
 
-    public Vector2 finalMove;
-    
+    public Vector2 hopDir;
+    public WaitForSeconds jumpCD;
+    public float hopAngle = 45f;
+    public float hopUp = 60f;
+    public float hopOut = 30f;
     public float jumpForce = 200f;
     public bool wallHop = false;
-    public bool right = false;
+    public int right = 0;
 
     public bool crouched = false;
 
@@ -48,10 +54,12 @@ public class PlayerBehaviour : MonoBehaviour
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
+        jumpCD = new WaitForSeconds(0.2f);
     }
 
     void Update()
     {
+        lastDir = moveDir;
         moveDir = (transform.right * Input.GetAxisRaw("Horizontal")).normalized;
         Crouch();
 
@@ -140,9 +148,9 @@ public class PlayerBehaviour : MonoBehaviour
         {
             speedCap = airSpeed;
 
-            if (rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap && rb2d.velocity.x != moveDir.x)
+            if ((rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap) || moveDir != lastDir)
             {
-                rb2d.AddForce(moveDir * moveForce, ForceMode2D.Impulse);
+                rb2d.AddForce(moveDir * moveForce * ungroundedModifier, ForceMode2D.Impulse);
             }
         }
     }
@@ -150,29 +158,45 @@ public class PlayerBehaviour : MonoBehaviour
     /// <summary>
     /// Used to jump
     /// </summary>
-    void Jump()
+    IEnumerator Jump()
     {
         if (Input.GetKeyDown(jump))
         {
-            if (grounded == true)
+            if (grounded == true || doubleJump == true)
             {
                 rb2d.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
             }
             else if (wallHop == true)
             {
-                if (right)
+                if (Input.GetAxisRaw("Vertical") != 0)
                 {
-                    hopDir = Quaternion.Euler(0f, 0f, 45f) * Vector2.up;
+                    switch (Input.GetAxisRaw("Vertical"))
+                    {
+                        case 1:
+                            hopDir = Quaternion.Euler(0f, 0f, hopUp * right) * Vector2.up;
+                            break;
+
+                        case -1:
+                            hopDir = Quaternion.Euler(0f, 0f, hopOut * right) * Vector2.up;
+                            break;
+
+                        default:
+                            break;
+                    }
                 }
                 else
                 {
-                    hopDir = Quaternion.Euler(0f, 0f, -45f) * Vector2.up;
+                    hopDir = Quaternion.Euler(0f, 0f, hopAngle * right) * Vector2.up;
                 }
 
                 rb2d.velocity = Vector2.zero;
                 rb2d.AddForce(hopDir * jumpForce * 1.5f, ForceMode2D.Impulse);
             }
+
+            yield return jumpCD;
         }
+
+        yield return null;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -211,7 +235,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         grounded = false;
         wallHop = false;
-        right = false;
+        right = -1;
 
         float curveCenters = (coll.bounds.extents.y - coll.bounds.extents.x);
         curveCenterBottom = coll.bounds.center - Vector3.up * curveCenters;
@@ -234,10 +258,15 @@ public class PlayerBehaviour : MonoBehaviour
             {
                 if(c.point.x > transform.position.x)
                 {
-                    right = true;
+                    right = 1;
                 }
 
                 wallHop = true;
+            }
+            //Drop input if it doesn't count as ground to avoid sticking
+            else if (c.point != null)
+            {
+                dropInput = true;
             }
         }
     }
