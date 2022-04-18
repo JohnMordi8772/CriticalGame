@@ -53,6 +53,14 @@ public class PlayerBehaviour : MonoBehaviour
     public int itemCount;
     public int sleepItemCount;
     public int gameItemCount;
+    public int loseCounter;
+    public GameObject LoseObject;
+
+    public GameObject[] Last10Pickups = new GameObject[10];
+    public GameObject PickupSweet;
+    public GameObject PickupSleep;
+    public GameObject PickupGame;
+
 
     void Start()
     {
@@ -79,6 +87,8 @@ public class PlayerBehaviour : MonoBehaviour
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
+
+        LoseCondition();
     }
 
     void FixedUpdate()
@@ -275,5 +285,17 @@ public class PlayerBehaviour : MonoBehaviour
                 dropInput = true;
             }
         }
+    }
+
+    void LoseCondition()
+    {
+        
+        for (int i = 0; i < 9 ; i++)
+        {
+          if(itemCount == 10 || sleepItemCount == 10 || gameItemCount == 10)
+            {
+                LoseObject.SetActive(true);
+            }
+        }    
     }
 }

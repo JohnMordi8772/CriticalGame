@@ -26,20 +26,32 @@ public class ItemBehaviour : MonoBehaviour
     {
         if(gameObject.tag == "Sweets")
         {
-            cc2d.size = new Vector2(1 + (pb.itemCount - pb.sleepItemCount - pb.gameItemCount),
-                1 + (pb.itemCount - pb.sleepItemCount - pb.gameItemCount));
+            cc2d.size = new Vector2(1 + (pb.itemCount),
+                1 + (pb.itemCount ));
         }
         if (gameObject.tag == "Sleep")
         {
-            cc2d.size = new Vector2(1 + (pb.sleepItemCount - pb.itemCount - pb.gameItemCount),
-                1 + (pb.sleepItemCount - pb.itemCount - pb.gameItemCount));
+            cc2d.size = new Vector2(1 + (pb.sleepItemCount),
+                1 + (pb.sleepItemCount));
         }
-        if (gameObject.tag == "Game")
+        if (gameObject.tag == "Games")
         {
-            cc2d.size = new Vector2(1 + (pb.gameItemCount - pb.sleepItemCount - pb.itemCount),
-                1 + (pb.gameItemCount - pb.sleepItemCount - pb.itemCount));
+            cc2d.size = new Vector2(1 + (pb.gameItemCount ),
+                1 + (pb.gameItemCount));
         }
 
+        if (pb.itemCount < 0)
+        {
+            pb.itemCount = 0;
+        }
+        if (pb.sleepItemCount < 0)
+        {
+            pb.sleepItemCount = 0;
+        }
+        if (pb.gameItemCount < 0)
+            {
+                pb.gameItemCount = 0;
+            }
 
     }
 
@@ -66,7 +78,7 @@ public class ItemBehaviour : MonoBehaviour
                 target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position,
                     ((1 + ((pb.sleepItemCount) * .5f)) * .03f));
             }
-            if (gameObject.tag == "Game")
+            if (gameObject.tag == "Games")
             {
                 target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position,
                     ((1 + ((pb.gameItemCount) * .5f)) * .03f));
@@ -74,19 +86,34 @@ public class ItemBehaviour : MonoBehaviour
 
             if (Vector2.Distance(Player.transform.position, gameObject.transform.position) < 1.0f && isChecked == false)
             {
+
                 isChecked = true;
-                if(gameObject.tag == "Sweets")
+
+                if (gameObject.tag == "Sweets")
                 {
                     pb.itemCount++;
-                }
+                    pb.sleepItemCount--;
+                    pb.gameItemCount--;
+                  
+                }   
                 if (gameObject.tag == "Sleep")
                 {
-                    pb.sleepItemCount++;
+                     pb.itemCount--;
+                     pb.sleepItemCount++;
+                     pb.gameItemCount--;
+                    
+                        
                 }
-                if (gameObject.tag == "Game")
+                if (gameObject.tag == "Games")
                 {
+                    pb.itemCount--;
+                    pb.sleepItemCount--;
                     pb.gameItemCount++;
+
+
                 }
+                
+               
                 
                 Destroy(gameObject);
             }
