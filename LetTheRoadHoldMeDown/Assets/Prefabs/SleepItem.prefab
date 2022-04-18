@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5035512896437635694}
   - component: {fileID: -6194710988228432543}
   - component: {fileID: -3864068523201429067}
+  - component: {fileID: 6245367807472776832}
   m_Layer: 0
   m_Name: SleepItem
   m_TagString: Sleep
@@ -95,7 +96,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -108,16 +109,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2552478637602142611}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a7cbea76612f7d4a87b4659d0eb1e66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cc2d: {fileID: 0}
-  Player: {fileID: 0}
-  pb: {fileID: 0}
-  isChecked: 0
-  circ2d: {fileID: 0}
 --- !u!70 &-3864068523201429067
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -134,3 +130,15 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1, y: 1}
   m_Direction: 0
+--- !u!114 &6245367807472776832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2552478637602142611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8da74f9230aa584886f34faa0871730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
