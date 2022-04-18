@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingPlatformBehaviour : MonoBehaviour
+public class VerticalMovingPlatformBehaviour : MonoBehaviour
 {
     public float moveSpeed;
     public bool moveLeft;
@@ -11,9 +11,9 @@ public class MovingPlatformBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveSpeed = 10f;
+        moveSpeed = 5f;
 
-        InvokeRepeating("FlipDirection", 5, 5);
+        InvokeRepeating("FlipDirection", 8, 8);
     }
 
     // Update is called once per frame
@@ -21,14 +21,14 @@ public class MovingPlatformBehaviour : MonoBehaviour
     {
 
         Move();
-      
+       
     }
 
 
     void Move()
     {
 
-        transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+        transform.position += Vector3.up * moveSpeed * Time.deltaTime;
 
     }
 
@@ -40,10 +40,7 @@ public class MovingPlatformBehaviour : MonoBehaviour
     {
         if (target.tag == "Player")
         {
-            target.transform.position += Vector3.right * moveSpeed * Time.deltaTime;
+            target.transform.position += Vector3.up * moveSpeed * Time.deltaTime;
         }
     }
-
-    
 }
-
