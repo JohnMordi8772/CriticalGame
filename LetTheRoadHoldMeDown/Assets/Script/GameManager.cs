@@ -6,19 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    List<GameObject> candy, games, pillows;
+    static List<GameObject> items;
+    public List<GameObject> itemsRef;
     int stressValue, stressMax;
     static int stressMultiplier;
     static string lastItem;
     Environment environment;
+    public Text environmentText, itemText, totalText;
+    public GameObject winScreen, loseScreen;
     public Slider stressVisual;
 
     // Start is called before the first frame update
     void Start()
     {
+        items = itemsRef;
         stressVisual.value = 0;
         stressMultiplier = -3;
-        stressMax = 200;
+        stressMax = 400;
         stressVisual.maxValue = stressMax;
         StartCoroutine(StressGain());
     }
@@ -26,18 +30,24 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Alpha1) && stressMultiplier != 5)
-        {
-            stressMultiplier++;
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            stressMultiplier = 0;
-        }
+        environmentText.text = "Environmental Stress: " + environment.currentStress;
+        itemText.text = "Item Stress: " + stressMultiplier;
+        totalText.text = stressVisual.value + "/" + stressMax;
         if(stressVisual.value == stressMax)
+        {
+            loseScreen.SetActive(true);
+            Time.timeScale = 0;
+        }
+        if (items.Count <= 0)
+        {
+            winScreen.SetActive(true);
+            Time.timeScale = 0;
+        }
+        if(Time.timeScale == 0 && Input.GetKeyDown(KeyCode.R))
         {
             SceneManager.LoadScene(0);
         }
+
     }
 
     IEnumerator StressGain()
@@ -46,11 +56,12 @@ public class GameManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1);
 
+            //stressValue += stressMultiplier + environment.currentStress;
             stressVisual.value += stressMultiplier + environment.currentStress;
         }
     }
 
-    public static void AdjustMultiplier(string tag)
+    public static void AdjustMultiplier(string tag, GameObject obj)
     {
         if(tag == lastItem)
         {
@@ -61,6 +72,7 @@ public class GameManager : MonoBehaviour
             lastItem = tag;
             stressMultiplier = -1;
         }
+        items.Remove(obj);
     }
 
     public void SetCurrentEnvironment(Environment inEnvironment)

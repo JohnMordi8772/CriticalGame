@@ -20,7 +20,7 @@ public class Item : MonoBehaviour
     {
         if (collision.gameObject.tag == "Player")
         {
-            GameManager.AdjustMultiplier(gameObject.tag);
+            GameManager.AdjustMultiplier(gameObject.tag, gameObject);
             Destroy(gameObject);
         }
     }
