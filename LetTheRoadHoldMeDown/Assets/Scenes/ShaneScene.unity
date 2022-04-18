@@ -558,12 +558,20 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5456867445030159747, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
+      propertyPath: airSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456867445030159747, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
       propertyPath: jumpForce
       value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 5456867445030159747, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
       propertyPath: moveForce
       value: 150
+      objectReference: {fileID: 0}
+    - target: {fileID: 5456867445030159747, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
+      propertyPath: ungroundedModifier
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 5456867445030159750, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
       propertyPath: m_RootOrder
