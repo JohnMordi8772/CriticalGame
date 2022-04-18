@@ -191,7 +191,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
 
             rb2d.velocity = Vector2.zero;
-            rb2d.AddForce(hopDir * jumpForce, ForceMode2D.Impulse);
+            rb2d.AddForce(hopDir * jumpForce * 1.25f, ForceMode2D.Impulse);
         }
         else if (grounded == true || doubleJump == true)
         {
