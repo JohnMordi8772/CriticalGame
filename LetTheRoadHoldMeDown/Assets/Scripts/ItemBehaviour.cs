@@ -59,17 +59,17 @@ public class ItemBehaviour : MonoBehaviour
             if(gameObject.tag == "Sweets")
             {
                 target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position, 
-                    ((1 + ((pb.itemCount ) * .5f)) * .03f));
+                    ((1 + ((pb.itemCount ) * .75f)) * .03f));
             }
             if (gameObject.tag == "Sleep")
             {
                 target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position,
-                    ((1 + ((pb.sleepItemCount) * .5f)) * .03f));
+                    ((1 + ((pb.sleepItemCount) * .75f)) * .03f));
             }
             if (gameObject.tag == "Game")
             {
                 target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position,
-                    ((1 + ((pb.gameItemCount) * .5f)) * .03f));
+                    ((1 + ((pb.gameItemCount) * .75f)) * .03f));
             }
 
             if (Vector2.Distance(Player.transform.position, gameObject.transform.position) < 1.0f && isChecked == false)
