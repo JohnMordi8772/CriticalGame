@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 6736476170635873892}
   m_Layer: 0
   m_Name: item
-  m_TagString: Untagged
+  m_TagString: Sweets
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -132,3 +132,5 @@ MonoBehaviour:
   cc2d: {fileID: 0}
   Player: {fileID: 0}
   pb: {fileID: 0}
+  isChecked: 0
+  circ2d: {fileID: 0}

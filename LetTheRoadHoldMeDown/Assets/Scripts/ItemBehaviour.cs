@@ -24,28 +24,70 @@ public class ItemBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        cc2d.size = new Vector2(1 + (pb.itemCount), 1 + (pb.itemCount));
+        if(gameObject.tag == "Sweets")
+        {
+            cc2d.size = new Vector2(1 + (pb.itemCount - pb.sleepItemCount - pb.gameItemCount),
+                1 + (pb.itemCount - pb.sleepItemCount - pb.gameItemCount));
+        }
+        if (gameObject.tag == "Sleep")
+        {
+            cc2d.size = new Vector2(1 + (pb.sleepItemCount - pb.itemCount - pb.gameItemCount),
+                1 + (pb.sleepItemCount - pb.itemCount - pb.gameItemCount));
+        }
+        if (gameObject.tag == "Game")
+        {
+            cc2d.size = new Vector2(1 + (pb.gameItemCount - pb.sleepItemCount - pb.itemCount),
+                1 + (pb.gameItemCount - pb.sleepItemCount - pb.itemCount));
+        }
+
+
     }
 
-   /* private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if(collision.collider.tag == "Player")
-        {
-            pb.itemCount++;
-            Destroy(gameObject);
-        }
-    }*/
+    /* private void OnCollisionEnter2D(Collision2D collision)
+     {
+         if(collision.collider.tag == "Player")
+         {
+             pb.itemCount++;
+             Destroy(gameObject);
+         }
+     }*/
 
     private void OnTriggerStay2D(Collider2D target)
     {
         if(target.tag == "Player")
         {
-            target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position, ((1 + (pb.itemCount * .1f)) * .03f));
+            if(gameObject.tag == "Sweets")
+            {
+                target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position, 
+                    ((1 + ((pb.itemCount ) * .1f)) * .03f));
+            }
+            if (gameObject.tag == "Sleep")
+            {
+                target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position,
+                    ((1 + ((pb.sleepItemCount) * .1f)) * .03f));
+            }
+            if (gameObject.tag == "Game")
+            {
+                target.transform.position = Vector3.MoveTowards(target.transform.position, transform.position,
+                    ((1 + ((pb.gameItemCount) * .1f)) * .03f));
+            }
 
-            if(Vector2.Distance(Player.transform.position, gameObject.transform.position) < .75f && isChecked == false)
+            if (Vector2.Distance(Player.transform.position, gameObject.transform.position) < 1.0f && isChecked == false)
             {
                 isChecked = true;
-                pb.itemCount++;
+                if(gameObject.tag == "Sweets")
+                {
+                    pb.itemCount++;
+                }
+                if (gameObject.tag == "Sleep")
+                {
+                    pb.sleepItemCount++;
+                }
+                if (gameObject.tag == "Game")
+                {
+                    pb.gameItemCount++;
+                }
+                
                 Destroy(gameObject);
             }
         }

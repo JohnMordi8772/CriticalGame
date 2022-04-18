@@ -44,6 +44,8 @@ public class PlayerBehaviour : MonoBehaviour
     public float sensitivity = 200f;
 
     public int itemCount;
+    public int sleepItemCount;
+    public int gameItemCount;
 
     void Start()
     {
