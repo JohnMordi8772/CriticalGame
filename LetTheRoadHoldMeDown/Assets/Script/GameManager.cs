@@ -8,11 +8,12 @@ public class GameManager : MonoBehaviour
 {
     static List<GameObject> items;
     public List<GameObject> itemsRef;
+    static int sweetCount, sleepCount, gameCount;
     int stressValue, stressMax;
     static int stressMultiplier;
     static string lastItem;
     Environment environment;
-    public Text environmentText, itemText, totalText;
+    public Text environmentText, itemText, totalText, sweetText, sleepText, gameText;
     public GameObject winScreen, loseScreen;
     public Slider stressVisual;
 
@@ -23,6 +24,9 @@ public class GameManager : MonoBehaviour
         stressVisual.value = 0;
         stressMultiplier = -3;
         stressMax = 400;
+        sweetCount = 16;
+        sleepCount = 18;
+        gameCount = 16;
         stressVisual.maxValue = stressMax;
         StartCoroutine(StressGain());
     }
@@ -47,6 +51,9 @@ public class GameManager : MonoBehaviour
         {
             SceneManager.LoadScene(0);
         }
+        sweetText.text = ": " + sweetCount;
+        sleepText.text = ": " + sleepCount;
+        gameText.text = ": " + gameCount;
 
     }
 
@@ -63,6 +70,18 @@ public class GameManager : MonoBehaviour
 
     public static void AdjustMultiplier(string tag, GameObject obj)
     {
+        if (tag == "Sweets")
+        {
+            sweetCount--;
+        }
+        else if (tag == "Sleep")
+        {
+            sleepCount--;
+        }
+        else
+        {
+            gameCount--;
+        }
         if(tag == lastItem)
         {
             stressMultiplier++;
