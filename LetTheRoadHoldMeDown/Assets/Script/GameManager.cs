@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
         items = itemsRef;
         stressVisual.value = 0;
         stressMultiplier = -3;
-        stressMax = 500;
+        stressMax = 400;
         sweetCount = 16;
         sleepCount = 18;
         gameCount = 16;
