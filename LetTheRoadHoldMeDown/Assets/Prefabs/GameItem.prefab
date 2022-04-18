@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1112175348243441172}
   - component: {fileID: 3131188356440934944}
   - component: {fileID: -3500779870543289381}
+  - component: {fileID: 500413915889960394}
   m_Layer: 0
   m_Name: GameItem
   m_TagString: Games
@@ -117,3 +118,19 @@ MonoBehaviour:
   pb: {fileID: 0}
   isChecked: 0
   circ2d: {fileID: 0}
+--- !u!70 &500413915889960394
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4398859896651940549}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1, y: 1}
+  m_Direction: 0
