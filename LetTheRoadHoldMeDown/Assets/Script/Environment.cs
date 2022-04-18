@@ -10,7 +10,7 @@ public class Environment : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        minStress = -3;
+        minStress = -2;
         currentStress = minStress;
         maxStress = 3;
     }

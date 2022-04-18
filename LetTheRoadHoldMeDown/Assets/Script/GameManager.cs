@@ -16,18 +16,20 @@ public class GameManager : MonoBehaviour
     public Text environmentText, itemText, totalText, sweetText, sleepText, gameText;
     public GameObject winScreen, loseScreen;
     public Slider stressVisual;
+    static Slider stressVisualStatic;
 
     // Start is called before the first frame update
     void Start()
     {
         items = itemsRef;
         stressVisual.value = 0;
-        stressMultiplier = -3;
+        stressMultiplier = -5;
         stressMax = 400;
         sweetCount = 16;
         sleepCount = 18;
         gameCount = 16;
         stressVisual.maxValue = stressMax;
+        stressVisualStatic = stressVisual;
         StartCoroutine(StressGain());
     }
 
@@ -64,7 +66,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             //stressValue += stressMultiplier + environment.currentStress;
-            stressVisual.value += stressMultiplier + environment.currentStress;
+            stressVisual.value += 2 + environment.currentStress;
         }
     }
 
@@ -84,12 +86,13 @@ public class GameManager : MonoBehaviour
         }
         if(tag == lastItem)
         {
-            stressMultiplier++;
+            stressVisualStatic.value += stressMultiplier;
+            stressMultiplier += 2;
         }
         else
         {
             lastItem = tag;
-            stressMultiplier = -1;
+            stressMultiplier = -5;
         }
         items.Remove(obj);
     }
