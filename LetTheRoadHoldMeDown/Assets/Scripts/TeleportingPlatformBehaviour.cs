@@ -32,7 +32,7 @@ public class TeleportingPlatformBehaviour : MonoBehaviour
             transform.position += new Vector3(10, 0, 0);
         }
 
-        else if(transform.position.x == xPos2)
+        else if(transform.position.x == xPos2)  
         {
             xPos1Check = false;
             xPos2Check = true;
