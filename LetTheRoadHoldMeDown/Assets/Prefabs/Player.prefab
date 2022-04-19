@@ -206,18 +206,28 @@ MonoBehaviour:
   hits: []
   groundNormal: {x: 0, y: 0}
   point: {x: 0, y: 0}
-  pointDir: {x: 0, y: 0}
   curveCenterBottom: {x: 0, y: 0}
+  curveCenterTop: {x: 0, y: 0}
   moveDir: {x: 0, y: 0}
+  lastDir: {x: 0, y: 0}
+  finalMove: {x: 0, y: 0}
+  heldVelocity: {x: 0, y: 0}
   moveForce: 150
   walkSpeed: 10
   sprintSpeed: 20
   crouchSpeed: 5
+  airSpeed: 5
   speedCap: 10
-  ungroundedModifier: 2
-  finalMove: {x: 0, y: 0}
+  ungroundedModifier: 0.75
+  dropInput: 0
+  doubleJump: 1
+  hopDir: {x: 0, y: 0}
+  hopAngle: 45
+  hopUp: 60
+  hopOut: 30
   jumpForce: 500
-  jumped: 0
+  wallHop: 0
+  right: 0
   crouched: 0
   jump: 32
   sprint: 306

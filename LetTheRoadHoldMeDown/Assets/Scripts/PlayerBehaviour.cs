@@ -6,7 +6,6 @@ public class PlayerBehaviour : MonoBehaviour
 {
     public Rigidbody2D rb2d;
     public CapsuleCollider2D coll;
-    public SpriteRenderer sr;
 
     public bool grounded = false;
     public bool slipping = false;
@@ -30,7 +29,6 @@ public class PlayerBehaviour : MonoBehaviour
     public float crouchSpeed = 5f;
     public float airSpeed = 5f;
     public float speedCap = 10f;
-    public float ungroundedModifier = 0.75f;
     public bool dropInput = false;
     public bool doubleJump = true;
 
@@ -47,7 +45,6 @@ public class PlayerBehaviour : MonoBehaviour
 
     public KeyCode jump = KeyCode.Space;
     public KeyCode sprint = KeyCode.LeftControl;
-    public KeyCode crouch = KeyCode.LeftShift;
     public float sensitivity = 200f;
 
     //public int itemCount;
@@ -72,7 +69,6 @@ public class PlayerBehaviour : MonoBehaviour
     {
         lastDir = moveDir;
         moveDir = (transform.right * Input.GetAxisRaw("Horizontal")).normalized;
-        Crouch();
 
         if (Input.GetKeyDown(jump))
         {
@@ -109,28 +105,6 @@ public class PlayerBehaviour : MonoBehaviour
     }
 
     /// <summary>
-    /// Alters camera height and collider height to simulate crouching
-    /// </summary>
-    void Crouch()
-    {
-        if (Input.GetKeyDown(crouch))
-        {
-            coll.size = new Vector2(coll.size.x, coll.size.y / 1.5f);
-            sr.size = new Vector2(sr.size.x, sr.size.y / 1.5f);
-
-            crouched = true;
-        }
-
-        if (Input.GetKeyUp(crouch))
-        {
-            coll.size = new Vector2(coll.size.x, coll.size.y * 1.5f);
-            sr.size = new Vector2(sr.size.x, sr.size.y * 1.5f);
-
-            crouched = false;
-        }
-    }
-
-    /// <summary>
     /// Contains the script for walking based on where the player is touching the ground (needs revising for corners)
     /// </summary>
     void Movement()
@@ -159,8 +133,6 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            speedCap *= ungroundedModifier;
-
             if ((rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap) || moveDir != lastDir)
             {
                 rb2d.AddForce(moveDir * moveForce, ForceMode2D.Impulse);
