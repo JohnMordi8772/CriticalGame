@@ -197,7 +197,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb2d: {fileID: 5456867445030159751}
   coll: {fileID: 5456867445030159748}
-  sr: {fileID: 0}
   grounded: 0
   slipping: 0
   normal: {fileID: 6200000, guid: 85794c0610317fb4bbe45f72359291b8, type: 2}
@@ -216,9 +215,8 @@ MonoBehaviour:
   walkSpeed: 10
   sprintSpeed: 20
   crouchSpeed: 5
-  airSpeed: 5
+  airSpeed: 10
   speedCap: 10
-  ungroundedModifier: 0.75
   dropInput: 0
   doubleJump: 1
   hopDir: {x: 0, y: 0}
@@ -231,7 +229,6 @@ MonoBehaviour:
   crouched: 0
   jump: 32
   sprint: 306
-  crouch: 304
   sensitivity: 200
 --- !u!50 &5456867445030159751
 Rigidbody2D:

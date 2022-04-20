@@ -10,6 +10,7 @@ public class PlayerBehaviour : MonoBehaviour
     public bool grounded = false;
     public bool slipping = false;
     public PhysicsMaterial2D normal;
+    public PhysicsMaterial2D slide;
     public PhysicsMaterial2D slip;
     public ContactPoint2D[] contacts;
     public List<Vector2> groundNormals;
@@ -40,6 +41,7 @@ public class PlayerBehaviour : MonoBehaviour
     public float jumpForce = 200f;
     public bool wallHop = false;
     public int right = 0;
+    public float slideForce = 50f;
 
     public bool crouched = false;
 
@@ -94,9 +96,13 @@ public class PlayerBehaviour : MonoBehaviour
             Movement();
         }
 
-        if (slipping != true)
+        if (grounded)
         {
             coll.sharedMaterial = normal;
+        }
+        else if (wallHop)
+        {
+            coll.sharedMaterial = slide;
         }
         else
         {
@@ -120,6 +126,11 @@ public class PlayerBehaviour : MonoBehaviour
         else
         {
             speedCap = walkSpeed;
+        }
+
+        if (wallHop == true)
+        {
+            rb2d.AddForce(Vector2.down * slideForce);
         }
 
         if (grounded == true)
@@ -174,7 +185,7 @@ public class PlayerBehaviour : MonoBehaviour
                 rb2d.velocity = heldVelocity;
             }
 
-            rb2d.AddForce(Vector3.up * jumpForce, ForceMode2D.Impulse);
+            rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
 
         yield return jumpCD;
@@ -225,8 +236,8 @@ public class PlayerBehaviour : MonoBehaviour
 
         foreach (ContactPoint2D c in contacts_)
         {
-            Vector3 dir = curveCenterBottom - c.point;
-            Vector3 dir2 = c.point - curveCenterTop;
+            Vector2 dir = curveCenterBottom - c.point;
+            Vector2 dir2 = c.point - curveCenterTop;
 
             //Ground detect
             if (dir.y > 0f && Mathf.Abs(Vector2.Angle(c.normal, Vector3.up)) <= 40)
