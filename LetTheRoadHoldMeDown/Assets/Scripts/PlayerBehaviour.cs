@@ -27,10 +27,7 @@ public class PlayerBehaviour : MonoBehaviour
     public float moveForce = 150f;
     public float walkSpeed = 10f;
     public float sprintSpeed = 20f;
-    public float crouchSpeed = 5f;
-    public float airSpeed = 5f;
     public float speedCap = 10f;
-    public bool dropInput = false;
     public bool doubleJump = true;
 
     public Vector2 hopDir;
@@ -43,8 +40,6 @@ public class PlayerBehaviour : MonoBehaviour
     public int right = 0;
     public float slideForce = 50f;
     public float gravityNegate;
-
-    public bool crouched = false;
 
     public KeyCode jump = KeyCode.Space;
     public KeyCode sprint = KeyCode.LeftControl;
@@ -66,7 +61,6 @@ public class PlayerBehaviour : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         jumpCD = new WaitForSeconds(0.2f);
-        gravityNegate = rb2d.gravityScale / 2;
     }
 
     void Update()
@@ -93,10 +87,7 @@ public class PlayerBehaviour : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (moveDir != Vector2.zero)
-        {
-            Movement();
-        }
+        Movement();
 
         if (grounded)
         {
@@ -117,11 +108,7 @@ public class PlayerBehaviour : MonoBehaviour
     /// </summary>
     void Movement()
     {
-        if (crouched == true)
-        {
-            speedCap = crouchSpeed;
-        }
-        else if (Input.GetKey(sprint))
+        if (Input.GetKey(sprint))
         {
             speedCap = sprintSpeed;
         }
@@ -137,7 +124,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (grounded == true)
         {
-            if (rb2d.velocity.magnitude < speedCap || moveDir != lastDir)
+            if (moveDir != lastDir || rb2d.velocity.magnitude < speedCap)
             {
                 finalMove = Vector3.ProjectOnPlane(moveDir, groundNormal);
 
@@ -146,7 +133,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
         else
         {
-            if ((rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap) || moveDir != lastDir)
+            if (moveDir != lastDir || (rb2d.velocity.x < speedCap && rb2d.velocity.x > -speedCap))
             {
                 rb2d.AddForce(moveDir * moveForce, ForceMode2D.Impulse);
             }
@@ -176,7 +163,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
 
             rb2d.velocity = Vector2.zero;
-            hopDir = new Vector2(hopDir.x * .6f * gravityNegate, hopDir.y * gravityNegate);
+            hopDir = new Vector2(hopDir.x, hopDir.y * gravityNegate);
             rb2d.AddForce(hopDir * jumpForce, ForceMode2D.Impulse);
         }
         else if (grounded == true || doubleJump == true)
@@ -188,7 +175,7 @@ public class PlayerBehaviour : MonoBehaviour
                 rb2d.velocity = heldVelocity;
             }
 
-            rb2d.AddForce(Vector2.up * gravityNegate * jumpForce, ForceMode2D.Impulse);
+            rb2d.AddForce(Vector2.up * jumpForce * gravityNegate, ForceMode2D.Impulse);
         }
 
         yield return jumpCD;
@@ -230,7 +217,6 @@ public class PlayerBehaviour : MonoBehaviour
     {
         grounded = false;
         wallHop = false;
-        dropInput = false;
         right = -1;
 
         float curveCenters = (coll.bounds.extents.y - coll.bounds.extents.x);
@@ -264,11 +250,6 @@ public class PlayerBehaviour : MonoBehaviour
 
                 doubleJump = true;
                 wallHop = true;
-            }
-            //Drop input if it doesn't count as ground to avoid sticking
-            else if (dir2.y > 0f)
-            {
-                dropInput = true;
             }
         }
     }
