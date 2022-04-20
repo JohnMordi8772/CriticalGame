@@ -176,7 +176,7 @@ public class PlayerBehaviour : MonoBehaviour
             }
 
             rb2d.velocity = Vector2.zero;
-            hopDir = new Vector2(hopDir.x, hopDir.y * gravityNegate);
+            hopDir = new Vector2(hopDir.x * .6f * gravityNegate, hopDir.y * gravityNegate);
             rb2d.AddForce(hopDir * jumpForce, ForceMode2D.Impulse);
         }
         else if (grounded == true || doubleJump == true)
