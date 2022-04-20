@@ -5939,6 +5939,10 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5456867445030159747, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
+      propertyPath: slide
+      value: 
+      objectReference: {fileID: 6200000, guid: f9799278c8607e545a38ad243f6757f6, type: 2}
+    - target: {fileID: 5456867445030159747, guid: d5088747129631b4f9c38347337ebcb7, type: 3}
       propertyPath: normal
       value: 
       objectReference: {fileID: 6200000, guid: 85794c0610317fb4bbe45f72359291b8, type: 2}
@@ -10402,7 +10406,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.16037738, g: 0.16037738, b: 0.16037738, a: 0}
+  m_BackGroundColor: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -10419,7 +10423,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 20.230894
+  orthographic size: 12
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
