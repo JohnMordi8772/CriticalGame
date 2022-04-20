@@ -23,7 +23,7 @@ public class GameManager : MonoBehaviour
     {
         items = itemsRef;
         stressVisual.value = 0;
-        stressMultiplier = -5;
+        stressMultiplier = -8;
         stressMax = 400;
         sweetCount = 16;
         sleepCount = 18;
@@ -92,7 +92,9 @@ public class GameManager : MonoBehaviour
         else
         {
             lastItem = tag;
-            stressMultiplier = -5;
+            stressMultiplier = -8;
+            stressVisualStatic.value += stressMultiplier;
+            stressMultiplier = -6;
         }
         items.Remove(obj);
     }
