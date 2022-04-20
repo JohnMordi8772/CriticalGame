@@ -42,6 +42,7 @@ public class PlayerBehaviour : MonoBehaviour
     public bool wallHop = false;
     public int right = 0;
     public float slideForce = 50f;
+    public float gravityNegate;
 
     public bool crouched = false;
 
@@ -65,6 +66,7 @@ public class PlayerBehaviour : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         jumpCD = new WaitForSeconds(0.2f);
+        gravityNegate = rb2d.gravityScale / 2;
     }
 
     void Update()
@@ -174,7 +176,8 @@ public class PlayerBehaviour : MonoBehaviour
             }
 
             rb2d.velocity = Vector2.zero;
-            rb2d.AddForce(hopDir * jumpForce * 1.25f, ForceMode2D.Impulse);
+            hopDir = new Vector2(hopDir.x, hopDir.y * gravityNegate);
+            rb2d.AddForce(hopDir * jumpForce, ForceMode2D.Impulse);
         }
         else if (grounded == true || doubleJump == true)
         {
@@ -185,7 +188,7 @@ public class PlayerBehaviour : MonoBehaviour
                 rb2d.velocity = heldVelocity;
             }
 
-            rb2d.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+            rb2d.AddForce(Vector2.up * gravityNegate * jumpForce, ForceMode2D.Impulse);
         }
 
         yield return jumpCD;
@@ -240,7 +243,7 @@ public class PlayerBehaviour : MonoBehaviour
             Vector2 dir2 = c.point - curveCenterTop;
 
             //Ground detect
-            if (dir.y > 0f && Mathf.Abs(Vector2.Angle(c.normal, Vector3.up)) <= 40)
+            if (dir.y > 0f && Mathf.Abs(Vector2.Angle(c.normal, Vector2.up)) <= 40)
             {
                 groundNormal = c.normal;
 
