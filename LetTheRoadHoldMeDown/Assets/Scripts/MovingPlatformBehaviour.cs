@@ -11,9 +11,9 @@ public class MovingPlatformBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        moveSpeed = 10f;
+        moveSpeed = 15f;
 
-        InvokeRepeating("FlipDirection", 5, 5);
+        InvokeRepeating("FlipDirection", 3, 3);
     }
 
     // Update is called once per frame
