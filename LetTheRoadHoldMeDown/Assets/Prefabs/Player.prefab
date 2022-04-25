@@ -200,6 +200,7 @@ MonoBehaviour:
   grounded: 0
   slipping: 0
   normal: {fileID: 6200000, guid: 85794c0610317fb4bbe45f72359291b8, type: 2}
+  slide: {fileID: 6200000, guid: f9799278c8607e545a38ad243f6757f6, type: 2}
   slip: {fileID: 6200000, guid: 89664f7b310546e43972a944f93e10a0, type: 2}
   groundNormals: []
   hits: []
@@ -211,14 +212,12 @@ MonoBehaviour:
   lastDir: {x: 0, y: 0}
   finalMove: {x: 0, y: 0}
   heldVelocity: {x: 0, y: 0}
-  moveForce: 150
+  moveForce: 5
   walkSpeed: 10
-  sprintSpeed: 20
-  crouchSpeed: 5
-  airSpeed: 10
-  speedCap: 10
-  dropInput: 0
-  doubleJump: 1
+  sprintSpeed: 40
+  crouchSpeed: 10
+  speedCap: 20
+  doubleJump: 0
   hopDir: {x: 0, y: 0}
   hopAngle: 45
   hopUp: 60
@@ -226,6 +225,8 @@ MonoBehaviour:
   jumpForce: 500
   wallHop: 0
   right: 0
+  slideForce: 100
+  gravityNegate: 0
   crouched: 0
   jump: 32
   sprint: 306
