@@ -13,7 +13,7 @@ public class TeleportingPlatformBehaviour : MonoBehaviour
     void Start()
     {
         xPos1 = transform.position.x;
-        xPos2 = xPos1 + 10;
+        xPos2 = xPos1 + 11.75f;
         InvokeRepeating("FlipPos", 3f, 3f);
     }
 
@@ -29,14 +29,14 @@ public class TeleportingPlatformBehaviour : MonoBehaviour
         {
             xPos1Check = true;
             xPos2Check = false;
-            transform.position += new Vector3(10, 0, 0);
+            transform.position += new Vector3(11.75f, 0, 0);
         }
 
         else if(transform.position.x == xPos2)  
         {
             xPos1Check = false;
             xPos2Check = true;
-            transform.position -= new Vector3(10, 0, 0);
+            transform.position -= new Vector3(11.75f, 0, 0);
         }
         
     }
