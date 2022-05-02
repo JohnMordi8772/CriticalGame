@@ -7,12 +7,14 @@ public class Environment : MonoBehaviour
     int minStress, maxStress;
     public int currentStress;
     [SerializeField] GameManager gameManager;
+    Camera[] cam;
     // Start is called before the first frame update
     void Start()
     {
-        minStress = -2;
+        minStress = 0;
         currentStress = minStress;
-        maxStress = 3;
+        maxStress = 5;
+        cam = GameObject.FindObjectsOfType<Camera>();
     }
 
     // Update is called once per frame
@@ -26,8 +28,13 @@ public class Environment : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(10);
-            if(currentStress != maxStress)
+            if (currentStress != maxStress)
+            {
                 currentStress++;
+                cam[0].backgroundColor += new Color((41f + (214f * ((currentStress) / 5f))) / 255, 0, 0);
+                cam[1].backgroundColor += new Color((41f + (214f * ((currentStress) / 5f))) / 255, 0, 0);
+                //Debug.Log(cam.backgroundColor);
+            }
         }
     }
 
@@ -48,6 +55,8 @@ public class Environment : MonoBehaviour
             StopAllCoroutines();
             StartCoroutine(IncreasingStress());
             gameManager.SetCurrentEnvironment(this);
+            cam[0].backgroundColor = new Color((41f + (214f * ((currentStress) / 5f))) / 255, 41f / 255, 41f / 255);
+            cam[1].backgroundColor = new Color((41f + (214f * ((currentStress) / 5f))) / 255, 41f / 255, 41f / 255);
         }
     }
 

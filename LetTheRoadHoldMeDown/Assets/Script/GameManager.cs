@@ -19,11 +19,11 @@ public class GameManager : MonoBehaviour
     static Slider stressVisualStatic;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         items = itemsRef;
         stressVisual.value = 0;
-        stressMultiplier = -8;
+        stressMultiplier = -10;
         stressMax = 400;
         sweetCount = 16;
         sleepCount = 18;
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         environmentText.text = "Environmental Stress: " + environment.currentStress;
+        //cameraMain.backgroundColor = Color.Lerp(cameraMain.backgroundColor, new Color((41f + (214f * ((environment.currentStress + 2) / 5)))/255, 41f/255, 41f/255), Mathf.PingPong(Time.time, 1));
         itemText.text = "Item Stress: " + stressMultiplier;
         totalText.text = stressVisual.value + "/" + stressMax;
         if(stressVisual.value == stressMax)
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1);
 
             //stressValue += stressMultiplier + environment.currentStress;
-            stressVisual.value += 2 + environment.currentStress;
+            stressVisual.value += environment.currentStress;
         }
     }
 
@@ -92,9 +93,9 @@ public class GameManager : MonoBehaviour
         else
         {
             lastItem = tag;
-            stressMultiplier = -8;
+            stressMultiplier = -10;
             stressVisualStatic.value += stressMultiplier;
-            stressMultiplier = -6;
+            stressMultiplier = -8;
         }
         items.Remove(obj);
     }

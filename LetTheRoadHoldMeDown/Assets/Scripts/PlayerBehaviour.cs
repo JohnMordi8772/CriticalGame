@@ -77,10 +77,10 @@ public class PlayerBehaviour : MonoBehaviour
         {
             Application.Quit();
         }
-        else if (Input.GetKey(KeyCode.R))
-        {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
+        //else if (Input.GetKey(KeyCode.R))
+        //{
+        //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        //}
 
         //LoseCondition();
     }
