@@ -14,12 +14,12 @@ TagManager:
   - MiniMap
   - Water
   - UI
+  - Player
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - LightWorld
+  - DarkWorld
   - 
   - 
   - 
