@@ -17,9 +17,10 @@ public class GameManager : MonoBehaviour
     public GameObject winScreen, loseScreen;
     public Slider stressVisual;
     static Slider stressVisualStatic;
+    public Camera cameraMain;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         items = itemsRef;
         stressVisual.value = 0;
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         environmentText.text = "Environmental Stress: " + environment.currentStress;
+        //cameraMain.backgroundColor = Color.Lerp(cameraMain.backgroundColor, new Color((41f + (214f * ((environment.currentStress + 2) / 5)))/255, 41f/255, 41f/255), Mathf.PingPong(Time.time, 1));
         itemText.text = "Item Stress: " + stressMultiplier;
         totalText.text = stressVisual.value + "/" + stressMax;
         if(stressVisual.value == stressMax)
