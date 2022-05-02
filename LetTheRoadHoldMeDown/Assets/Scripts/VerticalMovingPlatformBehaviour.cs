@@ -40,7 +40,13 @@ public class VerticalMovingPlatformBehaviour : MonoBehaviour
     {
         if (target.tag == "Player")
         {
-            target.transform.position += Vector3.up * moveSpeed * Time.deltaTime;
+            target.transform.parent = gameObject.transform;
         }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+            collision.transform.parent = null;
     }
 }
